@@ -20,3 +20,5 @@ export interface StatePanelModel {
   message: string;
   actionLabel?: string;
 }
+
+export type StatusTone = 'neutral' | 'success' | 'warning' | 'danger' | 'info';

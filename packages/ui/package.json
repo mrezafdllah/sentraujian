@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "exports": { ".": "./src/index.ts" },
-  "scripts": { "typecheck": "tsc --noEmit" }
+  "exports": { ".": "./src/index.ts", "./components": "./src/components.tsx" },
+  "scripts": { "typecheck": "tsc --noEmit", "test": "vitest run --passWithNoTests" },
+  "dependencies": { "react": "^19.0.0" },
+  "devDependencies": { "@testing-library/jest-dom": "^6.6.3", "@testing-library/react": "^16.1.0", "@types/react": "^19.0.3", "@types/react-dom": "^19.0.2", "jsdom": "^25.0.1", "vitest": "^2.1.8" }
 }
