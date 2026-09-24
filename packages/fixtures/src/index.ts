@@ -1,4 +1,4 @@
-import type { EdgeHealth, ExamPackage, MonitorParticipant, Prediction, Question, School } from '@sentraujian/api-contracts';
+import type { EdgeHealth, ExamPackage, ExamSchedule, MonitorParticipant, Prediction, Question, School, SyncBatch } from '@sentraujian/api-contracts';
 
 export const schools: School[] = [
   { id: 'school-1', code: 'SCH-JKT-001', name: 'SMAN 1 Nusantara', edgeStatus: 'ONLINE' },
@@ -18,6 +18,8 @@ export const questions: Question[] = [
 export const examPackages: ExamPackage[] = [{ id: 'package-1', code: 'utbk-2026-set-01', version: '1.2.0', questionCount: 140, status: 'PUBLISHED', checksum: 'sha256:package-demo-001' }];
 
 export const edgeHealth: EdgeHealth = { status: 'ONLINE', address: '192.168.1.10', storageUsedPercent: 64, activeParticipants: 186, lastSyncAt: '2026-09-22T07:42:00.000Z' };
+export const examSchedules: ExamSchedule[] = [{ id: 'schedule-1', name: 'UTBK Tryout Set 01', startsAt: '2026-09-24T08:00:00.000Z', durationMinutes: 195, participantCount: 186, packageId: 'package-1', status: 'READY' }];
+export const syncBatches: SyncBatch[] = [{ id: 'batch-001', entity: 'attempts', itemCount: 186, status: 'PENDING', retryCount: 0, lastAttemptAt: null }, { id: 'batch-000', entity: 'audit_events', itemCount: 24, status: 'SYNCED', retryCount: 1, lastAttemptAt: '2026-09-24T07:42:00.000Z' }];
 
 export const participants: MonitorParticipant[] = [
   { id: 'participant-1', displayName: 'Peserta 001', status: 'ACTIVE', lastSeenAt: 'Just now' },

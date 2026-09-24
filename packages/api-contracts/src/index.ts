@@ -15,6 +15,8 @@ export interface Question { id: string; code: string; subject: string; stem: str
 export interface ExamPackage { id: string; code: string; version: string; questionCount: number; status: 'DRAFT' | 'PUBLISHED'; checksum: string; }
 export interface EdgeHealth { status: EdgeStatus; address: string; storageUsedPercent: number; activeParticipants: number; lastSyncAt: string | null; }
 export interface MonitorParticipant { id: string; displayName: string; status: 'ACTIVE' | 'SUBMITTED' | 'DISCONNECTED'; lastSeenAt: string; }
+export interface ExamSchedule { id: string; name: string; startsAt: string; durationMinutes: number; participantCount: number; packageId: string; status: 'SCHEDULED' | 'READY' | 'ACTIVE' | 'COMPLETED'; }
+export interface SyncBatch { id: string; entity: string; itemCount: number; status: SyncStatus; retryCount: number; lastAttemptAt: string | null; }
 
 export type ExamProtocolErrorCode = 'INVALID_PROTOCOL_VERSION' | 'TOKEN_ALREADY_USED' | 'TOKEN_EXPIRED' | 'ATTEMPT_NOT_FOUND' | 'REVISION_CONFLICT' | 'ATTEMPT_ALREADY_SUBMITTED';
 export interface ExamBootstrap { protocolVersion: number; edgeId: string; edgeAddress: string; serverTime: string; sessionId: string; }
