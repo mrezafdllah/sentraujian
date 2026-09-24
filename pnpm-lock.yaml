@@ -72,6 +72,9 @@ importers:
       '@sentraujian/fixtures':
         specifier: workspace:*
         version: link:../../packages/fixtures
+      '@sentraujian/shared-config':
+        specifier: workspace:*
+        version: link:../../packages/shared-config
       '@sentraujian/ui':
         specifier: workspace:*
         version: link:../../packages/ui
