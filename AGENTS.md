@@ -2,8 +2,17 @@
 
 ## Repository Status
 
-- The repository currently contains the PRD and empty placeholders at `frontend/website-app/`, `frontend/mobile-app/`, and `ml-ai/`; do not assume build or test commands exist until the monorepo scaffold is created.
+- The Phase 1 monorepo scaffold now uses `apps/` and `packages/`; the former empty `frontend/website-app/` and `frontend/mobile-app/` placeholders were removed.
+- Use `npx.cmd --yes pnpm@9.15.0` on the current Windows environment when the `pnpm` shim is unavailable; `corepack enable` may fail without permission to write under `C:\Program Files\nodejs`.
 - The PRD requires a phased implementation: complete dummy UI and contracts first, then Go services and persistence, then hardening, load testing, deployment, and operational documentation.
+
+## Verified Commands
+
+- Install workspace dependencies with `npx.cmd --yes pnpm@9.15.0 install`.
+- Run all available TypeScript checks with `npx.cmd --yes pnpm@9.15.0 typecheck`.
+- Build the available Vite web apps with `npx.cmd --yes pnpm@9.15.0 build`; this currently builds Central Web and Edge Admin Web only.
+- The Mobile app is Expo-based and currently has `start` and `typecheck`, but no root production build task yet.
+- Do not commit generated `dist/`, `.turbo/`, `node_modules/`, or Expo build artifacts.
 
 ## Product Boundaries
 
