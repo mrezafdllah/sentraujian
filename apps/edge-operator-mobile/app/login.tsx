@@ -1,5 +1,3 @@
-import { Link } from 'expo-router';
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Redirect } from 'expo-router';
 
-export default function Login() { return <View style={styles.page}><Text style={styles.eyebrow}>SENTRAUJIAN OPERATOR</Text><Text style={styles.title}>Edge Console</Text><Text style={styles.muted}>Sign in to monitor your school Edge Server.</Text><TextInput placeholder="Operator ID" style={styles.input} /><TextInput placeholder="Password" secureTextEntry style={styles.input} /><Link href="/" asChild><TouchableOpacity style={styles.button}><Text style={styles.buttonText}>Connect to Edge</Text></TouchableOpacity></Link></View>; }
-const styles=StyleSheet.create({page:{flex:1,padding:28,paddingTop:90,backgroundColor:'#f1f6f8'},eyebrow:{color:'#267b62',fontSize:11,fontWeight:'700'},title:{fontSize:32,fontWeight:'700',color:'#143d52',marginTop:10},muted:{color:'#718591',marginTop:8,lineHeight:21},input:{backgroundColor:'#fff',borderColor:'#d7e2e7',borderWidth:1,borderRadius:10,padding:14,marginTop:18,fontSize:16},button:{backgroundColor:'#123e55',padding:16,borderRadius:10,alignItems:'center',marginTop:22},buttonText:{color:'#fff',fontWeight:'700'}});
+export default function LoginRedirect() { return <Redirect href="/mobile/login" />; }

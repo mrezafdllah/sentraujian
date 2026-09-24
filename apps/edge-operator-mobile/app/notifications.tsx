@@ -1,2 +1,3 @@
-import { Link } from 'expo-router'; import { StyleSheet, Text, View } from 'react-native';
-export default function Notifications(){return <View style={styles.page}><Link href="/" style={styles.back}>Back to dashboard</Link><Text style={styles.title}>Notifications</Text><View style={styles.card}><Text style={styles.heading}>Session is ready</Text><Text style={styles.muted}>Package verification completed for today&apos;s assessment.</Text></View><View style={styles.card}><Text style={styles.heading}>Central sync completed</Text><Text style={styles.muted}>Last successful sync was at 07:42.</Text></View></View>}; const styles=StyleSheet.create({page:{flex:1,padding:24,paddingTop:64,backgroundColor:'#f1f6f8'},back:{color:'#27719a',marginBottom:24},title:{fontSize:30,fontWeight:'700',color:'#143d52',marginBottom:22},card:{backgroundColor:'#fff',borderRadius:10,padding:18,marginBottom:12},heading:{fontSize:16,fontWeight:'700',color:'#173d51'},muted:{color:'#718591',marginTop:7,lineHeight:20}});
+import { Redirect } from 'expo-router';
+
+export default function NotificationsRedirect() { return <Redirect href="/mobile/notifications" />; }
