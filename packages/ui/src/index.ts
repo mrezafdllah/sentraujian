@@ -4,3 +4,12 @@ export const designTokens = {
 } as const;
 
 export interface StatusCardModel { label: string; value: string; tone: 'neutral' | 'success' | 'warning' | 'danger'; }
+
+export type ProductState = 'loading' | 'empty' | 'error' | 'offline' | 'permission';
+
+export interface StatePanelModel {
+  state: ProductState;
+  title: string;
+  message: string;
+  actionLabel?: string;
+}
