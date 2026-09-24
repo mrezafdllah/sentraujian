@@ -18,3 +18,35 @@ The React shell owns `/client/*` presentation states. Tauri/Rust owns platform c
 ## Later Contract Work
 
 Before backend binding, publish OpenAPI/JSON Schema payloads for bootstrap, device registration, token claim, question delivery, autosave acknowledgement, recovery, submit receipt, and error codes. Breaking changes require a `protocol_version` compatibility update.
+
+## Phase 1 Payload Lifecycle
+
+```text
+bootstrap(protocol_version)
+  -> ExamBootstrap
+claim_token(SNT-XXXX-XXXX-XXXX)
+  -> ExamTokenClaim
+get_question(attempt_id, question_id)
+  -> ExamQuestion
+autosave(attempt_id, question_id, answer, expected_revision)
+  -> ExamAutosave
+recover(attempt_id)
+  -> ExamRecovery
+submit(attempt_id)
+  -> ExamSubmitReceipt
+```
+
+Autosave is revisioned. A stale `expected_revision` must return `REVISION_CONFLICT`, allowing the client to refetch the latest attempt state instead of overwriting a newer answer. Token claims are single-use, and submit is idempotency-protected by the attempt identity.
+
+## Error Codes
+
+```text
+INVALID_PROTOCOL_VERSION
+TOKEN_ALREADY_USED
+TOKEN_EXPIRED
+ATTEMPT_NOT_FOUND
+REVISION_CONFLICT
+ATTEMPT_ALREADY_SUBMITTED
+```
+
+The Edge response must include the error code, human-readable message, protocol version, and request ID. Error codes are part of the client compatibility contract.

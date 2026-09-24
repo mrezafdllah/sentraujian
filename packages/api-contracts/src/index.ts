@@ -13,3 +13,12 @@ export interface School { id: string; code: string; name: string; edgeStatus: Ed
 export interface Prediction { id: string; questionId: string; status: 'AI_DRAFT' | 'APPROVED' | 'REJECTED'; confidence: number; modelVersion: string; datasetVersion: string; predictionRunId: string; contentHash: string; createdAt: string; }
 export interface EdgeHealth { status: EdgeStatus; address: string; storageUsedPercent: number; activeParticipants: number; lastSyncAt: string | null; }
 export interface MonitorParticipant { id: string; displayName: string; status: 'ACTIVE' | 'SUBMITTED' | 'DISCONNECTED'; lastSeenAt: string; }
+
+export type ExamProtocolErrorCode = 'INVALID_PROTOCOL_VERSION' | 'TOKEN_ALREADY_USED' | 'TOKEN_EXPIRED' | 'ATTEMPT_NOT_FOUND' | 'REVISION_CONFLICT' | 'ATTEMPT_ALREADY_SUBMITTED';
+export interface ExamBootstrap { protocolVersion: number; edgeId: string; edgeAddress: string; serverTime: string; sessionId: string; }
+export interface ExamTokenClaim { token: string; participantId: string; attemptId: string; sessionId: string; expiresAt: string; }
+export interface ExamQuestion { id: string; number: number; prompt: string; options: readonly string[]; }
+export interface ExamAutosave { attemptId: string; questionId: string; answer: string | null; revision: number; savedAt: string; }
+export interface ExamRecovery { attemptId: string; status: AttemptStatus; lastRevision: number; serverTime: string; }
+export interface ExamSubmitReceipt { receiptId: string; attemptId: string; status: 'SUBMITTED'; score: number; submittedAt: string; }
+export interface ExamProtocolError { code: ExamProtocolErrorCode; message: string; protocolVersion: number; requestId: string; }
