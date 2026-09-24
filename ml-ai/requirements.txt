@@ -1,0 +1,2 @@
+# MVP baseline uses only the Python standard library.
+# Add pinned dependencies here only when a reproducible model requires them.

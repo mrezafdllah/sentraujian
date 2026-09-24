@@ -5,6 +5,8 @@ dist/
 coverage/
 .local-logs/
 *.tsbuildinfo
+__pycache__/
+*.py[cod]
 .env
 .env.*
 !.env.example
