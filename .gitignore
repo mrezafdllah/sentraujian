@@ -3,6 +3,7 @@ dist/
 .turbo/
 .expo/
 coverage/
+.local-logs/
 *.tsbuildinfo
 .env
 .env.*

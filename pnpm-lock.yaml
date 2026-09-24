@@ -118,6 +118,10 @@ importers:
       '@sentraujian/api-contracts':
         specifier: workspace:*
         version: link:../api-contracts
+    devDependencies:
+      vitest:
+        specifier: ^2.1.8
+        version: 2.1.9(@types/node@26.6.2)(lightningcss@1.27.0)(terser@5.51.2)
 
   packages/shared-config: {}
 
