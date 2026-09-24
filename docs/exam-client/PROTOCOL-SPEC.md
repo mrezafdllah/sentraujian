@@ -19,6 +19,13 @@ The React shell owns `/client/*` presentation states. Tauri/Rust owns platform c
 
 Before backend binding, publish OpenAPI/JSON Schema payloads for bootstrap, device registration, token claim, question delivery, autosave acknowledgement, recovery, submit receipt, and error codes. Breaking changes require a `protocol_version` compatibility update.
 
+The formal contracts are now published at:
+
+- `docs/api/edge-exam-openapi.yaml`
+- `docs/api/schemas/exam-events.schema.json`
+- `docs/api/examples/exam-bootstrap.json`
+- `docs/api/examples/exam-autosave.json`
+
 ## Phase 1 Payload Lifecycle
 
 ```text

@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sentraujian.local/schemas/exam-events.schema.json",
+  "title": "SentraUjian Edge Exam Events",
+  "oneOf": [
+    { "$ref": "#/$defs/AnswerAutosaved" },
+    { "$ref": "#/$defs/AttemptRecovered" },
+    { "$ref": "#/$defs/AttemptSubmitted" }
+  ],
+  "$defs": {
+    "Envelope": {
+      "type": "object",
+      "required": ["eventType", "protocolVersion", "eventId", "occurredAt", "attemptId"],
+      "properties": {
+        "eventType": { "type": "string" },
+        "protocolVersion": { "type": "integer", "const": 1 },
+        "eventId": { "type": "string" },
+        "occurredAt": { "type": "string", "format": "date-time" },
+        "attemptId": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "AnswerAutosaved": {
+      "allOf": [
+        { "$ref": "#/$defs/Envelope" },
+        { "type": "object", "properties": { "eventType": { "const": "exam.answer.autosaved" }, "questionId": { "type": "string" }, "revision": { "type": "integer", "minimum": 1 } }, "required": ["questionId", "revision"] }
+      ]
+    },
+    "AttemptRecovered": {
+      "allOf": [
+        { "$ref": "#/$defs/Envelope" },
+        { "type": "object", "properties": { "eventType": { "const": "exam.attempt.recovered" }, "lastRevision": { "type": "integer", "minimum": 0 } }, "required": ["lastRevision"] }
+      ]
+    },
+    "AttemptSubmitted": {
+      "allOf": [
+        { "$ref": "#/$defs/Envelope" },
+        { "type": "object", "properties": { "eventType": { "const": "exam.attempt.submitted" }, "receiptId": { "type": "string" }, "score": { "type": "number", "minimum": 0, "maximum": 100 } }, "required": ["receiptId", "score"] }
+      ]
+    }
+  }
+}

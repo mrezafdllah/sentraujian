@@ -1,0 +1,144 @@
+openapi: 3.1.0
+info:
+  title: SentraUjian Edge Exam API
+  version: 0.1.0
+  description: Local participant protocol. Central Platform is not required during an active exam.
+servers:
+  - url: http://exam.local/local/v1
+    description: School LAN Edge Server
+paths:
+  /exam/bootstrap:
+    post:
+      operationId: bootstrapExamClient
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/BootstrapRequest' }
+      responses:
+        '200': { description: Edge bootstrap, content: { application/json: { schema: { $ref: '#/components/schemas/ExamBootstrap' } } } }
+        '409': { $ref: '#/components/responses/ProtocolError' }
+  /exam/tokens/claim:
+    post:
+      operationId: claimExamToken
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/TokenClaimRequest' }
+      responses:
+        '200': { description: Claimed attempt, content: { application/json: { schema: { $ref: '#/components/schemas/ExamTokenClaim' } } } }
+        '409': { $ref: '#/components/responses/ProtocolError' }
+  /exam/attempts/{attemptId}/questions/{questionId}:
+    get:
+      operationId: getExamQuestion
+      parameters:
+        - { $ref: '#/components/parameters/AttemptId' }
+        - { $ref: '#/components/parameters/QuestionId' }
+      responses:
+        '200': { description: Question without answer key, content: { application/json: { schema: { $ref: '#/components/schemas/ExamQuestion' } } } }
+        '404': { $ref: '#/components/responses/ProtocolError' }
+  /exam/attempts/{attemptId}/answers:
+    put:
+      operationId: autosaveAnswer
+      parameters: [{ $ref: '#/components/parameters/AttemptId' }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/AutosaveRequest' }
+      responses:
+        '200': { description: Autosave acknowledgement, content: { application/json: { schema: { $ref: '#/components/schemas/ExamAutosave' } } } }
+        '409': { $ref: '#/components/responses/ProtocolError' }
+  /exam/attempts/{attemptId}/recovery:
+    get:
+      operationId: recoverExamAttempt
+      parameters: [{ $ref: '#/components/parameters/AttemptId' }]
+      responses:
+        '200': { description: Attempt recovery state, content: { application/json: { schema: { $ref: '#/components/schemas/ExamRecovery' } } } }
+        '404': { $ref: '#/components/responses/ProtocolError' }
+  /exam/attempts/{attemptId}/submit:
+    post:
+      operationId: submitExamAttempt
+      parameters: [{ $ref: '#/components/parameters/AttemptId' }]
+      responses:
+        '200': { description: Final local result receipt, content: { application/json: { schema: { $ref: '#/components/schemas/ExamSubmitReceipt' } } } }
+        '409': { $ref: '#/components/responses/ProtocolError' }
+components:
+  parameters:
+    AttemptId: { name: attemptId, in: path, required: true, schema: { type: string, minLength: 1 } }
+    QuestionId: { name: questionId, in: path, required: true, schema: { type: string, minLength: 1 } }
+  responses:
+    ProtocolError:
+      description: Versioned Edge protocol error
+      content: { application/json: { schema: { $ref: '#/components/schemas/ExamProtocolError' } } }
+  schemas:
+    BootstrapRequest: { type: object, required: [protocolVersion], properties: { protocolVersion: { type: integer, minimum: 1 } }, additionalProperties: false }
+    TokenClaimRequest: { type: object, required: [token], properties: { token: { type: string, pattern: '^SNT-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$' } }, additionalProperties: false }
+    ExamBootstrap:
+      type: object
+      required: [protocolVersion, edgeId, edgeAddress, serverTime, sessionId]
+      properties:
+        protocolVersion: { type: integer }
+        edgeId: { type: string }
+        edgeAddress: { type: string }
+        serverTime: { type: string, format: date-time }
+        sessionId: { type: string }
+    ExamTokenClaim:
+      type: object
+      required: [token, participantId, attemptId, sessionId, expiresAt]
+      properties:
+        token: { type: string }
+        participantId: { type: string }
+        attemptId: { type: string }
+        sessionId: { type: string }
+        expiresAt: { type: string, format: date-time }
+    ExamQuestion:
+      type: object
+      required: [id, number, prompt, options]
+      properties:
+        id: { type: string }
+        number: { type: integer, minimum: 1 }
+        prompt: { type: string }
+        options: { type: array, minItems: 2, items: { type: string } }
+    AutosaveRequest:
+      type: object
+      required: [questionId, answer, expectedRevision]
+      properties:
+        questionId: { type: string }
+        answer: { type: [string, 'null'] }
+        expectedRevision: { type: integer, minimum: 0 }
+    ExamAutosave:
+      allOf:
+        - $ref: '#/components/schemas/AutosaveRequest'
+        - type: object
+          required: [attemptId, revision, savedAt]
+          properties:
+            attemptId: { type: string }
+            revision: { type: integer, minimum: 1 }
+            savedAt: { type: string, format: date-time }
+    ExamRecovery:
+      type: object
+      required: [attemptId, status, lastRevision, serverTime]
+      properties:
+        attemptId: { type: string }
+        status: { type: string, enum: [READY, ACTIVE, SUBMITTED, DISCONNECTED, RECOVERING] }
+        lastRevision: { type: integer, minimum: 0 }
+        serverTime: { type: string, format: date-time }
+    ExamSubmitReceipt:
+      type: object
+      required: [receiptId, attemptId, status, score, submittedAt]
+      properties:
+        receiptId: { type: string }
+        attemptId: { type: string }
+        status: { type: string, enum: [SUBMITTED] }
+        score: { type: number, minimum: 0, maximum: 100 }
+        submittedAt: { type: string, format: date-time }
+    ExamProtocolError:
+      type: object
+      required: [code, message, protocolVersion, requestId]
+      properties:
+        code: { type: string, enum: [INVALID_PROTOCOL_VERSION, TOKEN_ALREADY_USED, TOKEN_EXPIRED, ATTEMPT_NOT_FOUND, REVISION_CONFLICT, ATTEMPT_ALREADY_SUBMITTED] }
+        message: { type: string }
+        protocolVersion: { type: integer }
+        requestId: { type: string }

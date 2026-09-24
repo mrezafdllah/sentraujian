@@ -1,0 +1,7 @@
+{
+  "protocolVersion": 1,
+  "edgeId": "EDGE-JKT-001",
+  "edgeAddress": "192.168.1.10",
+  "serverTime": "2026-09-24T08:00:00.000Z",
+  "sessionId": "session-demo-001"
+}
