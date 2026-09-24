@@ -1,0 +1,49 @@
+openapi: 3.1.0
+info:
+  title: SentraUjian Central API
+  version: 0.1.0
+  description: Phase 2 bootstrap contract for Central Platform service health and readiness.
+servers:
+  - url: http://localhost:8080
+    description: Local development
+paths:
+  /health:
+    get:
+      operationId: getHealth
+      summary: Process health
+      responses:
+        '200': { $ref: '#/components/responses/StatusResponse' }
+  /readiness:
+    get:
+      operationId: getReadiness
+      summary: Dependency readiness
+      responses:
+        '200': { $ref: '#/components/responses/StatusResponse' }
+  /api/v1/health:
+    get:
+      operationId: getVersionedHealth
+      summary: Versioned process health
+      responses:
+        '200': { $ref: '#/components/responses/StatusResponse' }
+  /api/v1/readiness:
+    get:
+      operationId: getVersionedReadiness
+      summary: Versioned dependency readiness
+      responses:
+        '200': { $ref: '#/components/responses/StatusResponse' }
+components:
+  responses:
+    StatusResponse:
+      description: Central API status
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/StatusResponse' }
+  schemas:
+    StatusResponse:
+      type: object
+      required: [status, service, version, timestamp]
+      properties:
+        status: { type: string, enum: [ok, ready] }
+        service: { type: string, const: central-api }
+        version: { type: string, const: v1 }
+        timestamp: { type: string, format: date-time }
